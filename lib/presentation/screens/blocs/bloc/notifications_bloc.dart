@@ -11,15 +11,58 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationsBloc() : super(const NotificationsState()) {
-    // on<NotificationsEvent>((event, emit) {
-    //   // TODO: implement event handler
-    // });
+    on<NotificationStatusChanged>(_notificationStatusChanged);
+
+    //verificar estado de las notificaciones
+    _initialStatusCheck();
+
+    //listener para notificaciones en foreground
+    _onForegroundMessage();
   }
 
-  static Future<void> initializeFCM() async{
+  static Future<void> initializeFCM() async {
     await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  void _notificationStatusChanged(
+      NotificationStatusChanged event, Emitter<NotificationsState> emit) {
+    emit(state.copyWith(status: event.status));
+    _getFCMToken();
+  }
+
+  void _initialStatusCheck() async {
+    final settings = await messaging.getNotificationSettings();
+    add(NotificationStatusChanged(settings.authorizationStatus));
+  }
+
+  /*
+     jose@gmail.com: [
+      token1,
+      token2,
+      token3
+     ]
+     */
+
+  void _getFCMToken() async {
+    if (state.status != AuthorizationStatus.authorized) return;
+    final token = await messaging.getToken();
+    print(token);
+  }
+
+  //metodos para manejar el recibimiento de mensajes
+  void _handleRemoteMessage(RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification == null) return;
+
+    print('Message also contained a notification: ${message.notification}');
+  }
+
+  void _onForegroundMessage() {
+    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
   }
 
   void requestPermission() async {
@@ -33,6 +76,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       sound: true,
     );
 
-    settings.authorizationStatus;
+    add(NotificationStatusChanged(settings.authorizationStatus));
   }
 }
