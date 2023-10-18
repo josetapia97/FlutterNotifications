@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203749504418",
+    "project_id": "flutter-projects-70bfd",
+    "storage_bucket": "flutter-projects-70bfd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203749504418:android:e7190552ec47b686992efb",
+        "android_client_info": {
+          "package_name": "com.josetapia.push_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF1B46WL33EY5lBmiEbKQ9QgoCt1KF84U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
