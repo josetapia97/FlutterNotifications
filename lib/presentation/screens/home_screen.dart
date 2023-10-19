@@ -29,6 +29,21 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(height: 100,);
+    final notifications =
+        context.watch<NotificationsBloc>().state.notifications;
+
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) {
+        final notification = notifications[index];
+        return  ListTile(
+          title: Text(notification.tittle),
+          subtitle: Text(notification.body) ,
+          leading: notification.imageUrl != null
+           ?Image.network(notification.imageUrl!)
+           : null,
+        );
+      },
+    );
   }
 }
