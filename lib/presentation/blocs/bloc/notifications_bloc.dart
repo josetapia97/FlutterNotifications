@@ -71,7 +71,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   void _handleRemoteMessage(RemoteMessage message) {
     if (message.notification == null) return;
     final notification = PushMessage(
-        messageId: message.messageId?.replaceAll(':', '') ?? '',
+        messageId: message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
         tittle: message.notification!.title ?? '',
         body: message.notification!.body ?? '',
         sendDate: message.sentTime ?? DateTime.now(),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:push_app/presentation/blocs/bloc/notifications_bloc.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -10,14 +9,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: context
-            .select((NotificationsBloc bloc) => Text('${bloc.state.status}')),
+        title: context.select(
+          (NotificationsBloc bloc ) => Text('${ bloc.state.status }')
+        ),
         actions: [
-          IconButton(
-              onPressed: () {
-                context.read<NotificationsBloc>().requestPermission();
-              },
-              icon: const Icon(Icons.settings))
+          IconButton(onPressed: (){
+            context.read<NotificationsBloc>()
+              .requestPermission();
+          }, 
+          icon: const Icon( Icons.settings ))
         ],
       ),
       body: const _HomeView(),
@@ -25,26 +25,27 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+
 class _HomeView extends StatelessWidget {
   const _HomeView();
 
   @override
   Widget build(BuildContext context) {
-    final notifications =
-        context.watch<NotificationsBloc>().state.notifications;
+
+    final notifications = context.watch<NotificationsBloc>().state.notifications;
 
     return ListView.builder(
       itemCount: notifications.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         final notification = notifications[index];
         return ListTile(
-          title: Text(notification.tittle),
-          subtitle: Text(notification.body),
-          leading: notification.imageUrl != null
-              ? Image.network(notification.imageUrl!)
-              : null,
+          title: Text( notification.messageId ),
+          subtitle: Text( notification.body ),
+          leading: notification.imageUrl != null 
+            ? Image.network( notification.imageUrl! )
+            : null,
           onTap: () {
-            context.push('/push-details/${notification.messageId}');
+            context.push('/push-details/${ notification.messageId }');
           },
         );
       },
