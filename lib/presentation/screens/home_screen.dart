@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:push_app/presentation/screens/blocs/bloc/notifications_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:push_app/presentation/blocs/bloc/notifications_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,12 +37,15 @@ class _HomeView extends StatelessWidget {
       itemCount: notifications.length,
       itemBuilder: (context, index) {
         final notification = notifications[index];
-        return  ListTile(
+        return ListTile(
           title: Text(notification.tittle),
-          subtitle: Text(notification.body) ,
+          subtitle: Text(notification.body),
           leading: notification.imageUrl != null
-           ?Image.network(notification.imageUrl!)
-           : null,
+              ? Image.network(notification.imageUrl!)
+              : null,
+          onTap: () {
+            context.push('/push-details/${notification.messageId}');
+          },
         );
       },
     );
