@@ -63,12 +63,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   void _getFCMToken() async {
     if (state.status != AuthorizationStatus.authorized) return;
-    // final token = await messaging.getToken();
-    // print(token);
+    final token = await messaging.getToken();
+    print(token);
   }
 
   //metodos para manejar el recibimiento de mensajes
-  void _handleRemoteMessage(RemoteMessage message) {
+  void handleRemoteMessage(RemoteMessage message) {
     if (message.notification == null) return;
     final notification = PushMessage(
         messageId: message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
@@ -84,7 +84,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   void _onForegroundMessage() {
-    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
+    FirebaseMessaging.onMessage.listen(handleRemoteMessage);
   }
 
   void requestPermission() async {
