@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:push_app/config/local_notifications/local_notifications.dart';
 import 'package:push_app/domain/entities/push_messages.dart';
 import 'package:push_app/firebase_options.dart';
 
@@ -71,7 +72,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   void handleRemoteMessage(RemoteMessage message) {
     if (message.notification == null) return;
     final notification = PushMessage(
-        messageId: message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
+        messageId:
+            message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
         tittle: message.notification!.title ?? '',
         body: message.notification!.body ?? '',
         sendDate: message.sentTime ?? DateTime.now(),
@@ -98,6 +100,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       sound: true,
     );
 
+    //solicitar permiso a las localnotif
+    await requestPermissionLocalNotifications();
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
 

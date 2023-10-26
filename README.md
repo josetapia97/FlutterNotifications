@@ -51,3 +51,6 @@ Sigue las instrucciones para configurar Firebase en tu proyecto. 🔥
 
 
 ¡Gracias por utilizar PushApp y aprovechar al máximo las notificaciones push en tu aplicación! 🎉
+
+
+LocalNotif: https://pub.dev/packages/flutter_local_notifications#-android-setup
