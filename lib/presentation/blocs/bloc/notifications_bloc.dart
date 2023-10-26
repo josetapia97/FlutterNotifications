@@ -101,7 +101,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
 
     //solicitar permiso a las localnotif
-    await requestPermissionLocalNotifications();
+    await LocalNotifications.requestPermissionLocalNotifications();
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
 
