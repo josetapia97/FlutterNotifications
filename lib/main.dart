@@ -7,18 +7,25 @@ import 'package:push_app/config/theme/app_theme.dart';
 import 'package:push_app/presentation/blocs/bloc/notifications_bloc.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   await NotificationsBloc.initializeFCM();
   await LocalNotifications.initializeLocalNotifications();
+  
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => NotificationsBloc(
+          requestLocalNotificationPermissions: LocalNotifications.requestPermissionLocalNotifications,
+          showLocalNotification: LocalNotifications.showLocalNotification
+        ))
+      ], 
+      child: const MainApp())
+    
+  );
 
-  runApp(MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => NotificationsBloc(
-        requestLocalNotificationPermissions: LocalNotifications.requestPermissionLocalNotifications,
-        showLocalNotification: LocalNotifications.showLocalNotification
-      ))],
-      child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -30,23 +37,23 @@ class MainApp extends StatelessWidget {
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       theme: AppTheme().getTheme(),
-      builder: (context, child) =>
-          HandleNotificationInteractions(child: child!),
+      builder: (context, child) => HandleNotificationInteractions(child: child!),
     );
   }
 }
 
+
 class HandleNotificationInteractions extends StatefulWidget {
+  
   final Widget child;
   const HandleNotificationInteractions({super.key, required this.child});
 
   @override
-  State<HandleNotificationInteractions> createState() =>
-      _HandleNotificationInteractionsState();
+  State<HandleNotificationInteractions> createState() => _HandleNotificationInteractionsState();
 }
 
-class _HandleNotificationInteractionsState
-    extends State<HandleNotificationInteractions> {
+class _HandleNotificationInteractionsState extends State<HandleNotificationInteractions> {
+
   // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from
@@ -64,12 +71,13 @@ class _HandleNotificationInteractionsState
     // Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
-
+  
   void _handleMessage(RemoteMessage message) {
-    context.read<NotificationsBloc>().handleRemoteMessage(message);
 
-    final messageId =
-        message.messageId?.replaceAll(':', '').replaceAll('%', '');
+    context.read<NotificationsBloc>()
+      .handleRemoteMessage(message);
+
+    final messageId = message.messageId?.replaceAll(':', '').replaceAll('%', '');
     appRouter.push('/push-details/$messageId');
   }
 

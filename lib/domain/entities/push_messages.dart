@@ -1,16 +1,16 @@
 class PushMessage {
   final String messageId;
-  final String tittle;
+  final String title;
   final String body;
-  final DateTime sendDate;
+  final DateTime sentDate;
   final Map<String, dynamic>? data;
   final String? imageUrl;
 
   PushMessage(
       {required this.messageId,
-      required this.tittle,
+      required this.title,
       required this.body,
-      required this.sendDate,
+      required this.sentDate,
       this.data,
       this.imageUrl});
 
@@ -19,9 +19,9 @@ class PushMessage {
     return '''
   PushMessage --
     messageId: $messageId
-    tittle: $tittle
+    tittle: $title
     body: $body
-    sendDate: $sendDate
+    sentDate: $sentDate
     data: $data
     imageUrl: $imageUrl
 
