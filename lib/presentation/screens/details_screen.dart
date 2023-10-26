@@ -47,7 +47,7 @@ class _DetailsView extends StatelessWidget {
 
           const SizedBox( height: 30 ),
 
-          Text( message.tittle , style: textStyles.titleMedium ),
+          Text( message.title , style: textStyles.titleMedium ),
           Text( message.body ),
 
           const Divider(),
